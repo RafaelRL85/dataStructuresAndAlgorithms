@@ -10,11 +10,6 @@ public class DoubleLinkedList {
     //the head is basically the middle element if you want to call it like that
     private DoubleLinkedNode head;
 
-
-    public DoubleLinkedList(DoubleLinkedNode head) {
-        this.head = head;
-    }
-
     public DoubleLinkedNode getHead() {
         return head;
     }
@@ -58,4 +53,72 @@ public class DoubleLinkedList {
 
     }
 
+    /**
+     * remove a record with the root that matches the parameter
+     *
+     * example:
+     * {5,1,7} lets say we need to remove 1
+     *
+     * @param remove
+     * @return a boolean to say if it removed or not the element
+     *
+     */
+    public boolean remove(int remove){
+        //following the example remove 1
+        //   null->5->1  5->1->7   1-> 7 -> null
+
+        if(head == null) {
+            return false;
+        }
+
+        DoubleLinkedNode current = head;
+        //seach for the element
+        while(current.getNext() != null){
+            //if where we are is the one we are looking for
+            if(current.getRoot() == remove){
+                //then check if the current one has a previous
+                //return since there is no trace of the element we wanted to remove
+                return rearrangeList(current);
+
+
+            }
+            // condition to exit the while loop
+            current = current.getNext();
+        }
+        if (current.getRoot() == remove){
+            //then check if the current one has a previous
+            //return since there is no trace of the element we wanted to remove
+            return rearrangeList(current);
+
+        }
+
+        return false;
+    }
+
+    private boolean rearrangeList(DoubleLinkedNode doubleLinkedNode){
+        if(doubleLinkedNode.getPreviouos() != null){
+            //if it does then get the previous and change the value
+            //now the example would be null->5-7
+            doubleLinkedNode.getPreviouos().setNext(doubleLinkedNode.getNext());
+        }
+        //check if the current has a next value which it does
+        if(doubleLinkedNode.getNext() != null){
+            //then get the next and change its value and it would be:
+            // 5->7->null
+            doubleLinkedNode.getNext().setPreviouos(doubleLinkedNode.getPreviouos());
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        DoubleLinkedNode current = head;
+        StringBuilder stringToReturn = new StringBuilder();
+        stringToReturn.append(head.getRoot());
+        while(current.getNext() != null){
+            stringToReturn.append("->").append(current.getNext().getRoot());
+            current = current.getNext();
+        }
+        return stringToReturn.toString();
+    }
 }
